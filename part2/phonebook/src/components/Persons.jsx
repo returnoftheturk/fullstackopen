@@ -1,4 +1,4 @@
-export const Persons = ({persons, nameFilter}) => {
+export const Persons = ({persons, nameFilter, handleDelete}) => {
     const personsToShow = nameFilter ? 
         persons.filter(person => person.name.toLowerCase() .includes(nameFilter.toLowerCase())) : 
         persons;
@@ -8,7 +8,10 @@ export const Persons = ({persons, nameFilter}) => {
             <ul>
                 {personsToShow.map(person => (
                 <li key={person.id}>
-                    {person.name} {person.phoneNumber}
+                    <div>
+                        {person.name} {person.number} &nbsp;
+                        <button onClick={() => handleDelete(person.id)}> Delete </button>
+                    </div>
                 </li>
                 ))}
             </ul>
