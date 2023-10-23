@@ -3,12 +3,14 @@ import { SearchFilter } from './components/SearchFilter';
 import { PersonForm } from './components/PersonForm';
 import { Persons } from './components/Persons';
 import personsService from './services/persons';
+import { Notification } from './components/Notification';
 
 const App = () => {
   const [persons, setPersons] = useState([]);
   const [newName, setNewName] = useState('');
   const [newNumber, setNewNumber] = useState('');
   const [nameFilter, setNameFilter] = useState('');
+  const [notificationMessage, setNotificationMessage] = useState({});
 
   useEffect(() => {
     personsService
@@ -40,8 +42,28 @@ const App = () => {
         personsService
           .update(updatedPerson.id, updatedPerson)
           .then(returnedData => {
+            setNotificationMessage(
+              {
+                message: `Modified ${updatedPerson.name}'s number`,
+                isError: false
+              }
+            );
+            setTimeout(() => {
+              setNotificationMessage({});
+            }, 5000);
             setPersons(persons.map(p => p.id !== updatedPerson.id ? p : returnedData));
-          })
+          }).catch(err => {
+            setNotificationMessage(
+              {
+                message: `Information of ${updatedPerson.name} has already been removed from the server`,
+                isError: true
+              }
+            );
+            setTimeout(() => {
+              setNotificationMessage({});
+            }, 5000);
+            setPersons(persons.filter((p) => p.id !== updatedPerson.id));
+          });
       };
     } else {
       const personObject = {
@@ -52,9 +74,25 @@ const App = () => {
       personsService
         .create(personObject)
         .then(addedPerson => {
+          setNotificationMessage(
+            `Added ${addedPerson.name}'s number`
+          );
+          setTimeout(() => {
+            setNotificationMessage(null);
+          }, 5000);
           setPersons(persons.concat(addedPerson));
           setNewName('');
           setNewNumber('');
+        }).catch(err => {
+          setNotificationMessage(
+            {
+              message: `Something went wrong`,
+              isError: true
+            }
+          );
+          setTimeout(() => {
+            setNotificationMessage({});
+          }, 5000);
         });
     }
   }
@@ -66,6 +104,16 @@ const App = () => {
         .delete(id)
         .then(() => {
           setPersons(persons.filter(person => person.id !== id));
+        }).catch(err => {
+          setNotificationMessage(
+            {
+              message: `Something went wrong`,
+              isError: true
+            }
+          );
+          setTimeout(() => {
+            setNotificationMessage({});
+          }, 5000);
         })
     }
   }
@@ -73,6 +121,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification notification={notificationMessage} />
 
       <SearchFilter nameFilter={nameFilter} handleFilterChange={handleFilterChange}/>
 
