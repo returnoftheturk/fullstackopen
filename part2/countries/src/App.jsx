@@ -12,7 +12,39 @@ const FindCountries = ({handleCountryChange, countryInput}) => {
   )
 };
 
-const Results = ({countryFilter, allCountries}) => {
+const Result = ({country}) => {
+  return (
+    <div>
+      <h1>
+        {country.name.common}
+      </h1>
+      <div>
+        Capital: {country.capital[0]}
+      </div>
+      <div>
+        Area: {country.area}
+      </div>
+      <div>
+        Languages:
+        <ul>
+          {Object.values(country.languages).map(value => {
+              return (
+                <li>
+                  {value}
+                </li>
+              )
+            })
+          }
+        </ul>
+      </div>
+      <div>
+        <img src={country.flags.png}/>
+      </div>
+    </div>
+  );
+};
+
+const Results = ({countryFilter, allCountries, setCountryFilter}) => {
   const countryMatches = allCountries.filter(country => country.name.common.toLowerCase().includes(countryFilter.toLowerCase()));
   if(!countryFilter) return null;
   else if(countryMatches.length > 10) {
@@ -23,45 +55,27 @@ const Results = ({countryFilter, allCountries}) => {
     )
   } else if(countryMatches.length == 1) {
     return (
-      <div>
-        <h1>
-          {countryMatches[0].name.common}
-        </h1>
-        <div>
-          Capital: {countryMatches[0].capital[0]}
-        </div>
-        <div>
-          Area: {countryMatches[0].area}
-        </div>
-        <div>
-          Languages:
-          <ul>
-            {Object.values(countryMatches[0].languages).map(value => {
-                return (
-                  <li>
-                    {value}
-                  </li>
-                )
-              })
-            }
-          </ul>
-        </div>
-        <div>
-          <img src={countryMatches[0].flags.png}/>
-        </div>
-      </div>
+      <Result country={countryMatches[0]}/>
     );
   }
   else {
     return (
       <ul>
         {countryMatches.map((country, index) => {
-          return <li key={index}>{country.name.common}</li>
+          return (
+            <div>
+              <li key={index}>
+                {country.name.common} &nbsp;
+                <button onClick={() => setCountryFilter(country.name.common)}>
+                  Show
+                </button>
+              </li>
+            </div>
+          )
         })}
       </ul>
     )
   }
-
 }
 
 const App = () => {
@@ -87,7 +101,7 @@ const App = () => {
   return (
     <>
       <FindCountries countryInput={countryFilter} handleCountryChange={handleCountryChange} />
-      <Results countryFilter={countryFilter} allCountries={allCountries}/>
+      <Results countryFilter={countryFilter} allCountries={allCountries} setCountryFilter={setCountryFilter}/>
     </>
   )
 }
