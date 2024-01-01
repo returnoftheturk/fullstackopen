@@ -14,9 +14,9 @@ const requestLogger = (request, response, next) => {
 };
 
 app.use(cors());
+app.use(express.static('dist'));
 app.use(express.json());
 app.use(requestLogger);
-app.use(express.static('dist'));
 
 app.get("/", (request, response) => {
   response.send("<h1>Hello World!</h1>");
@@ -47,25 +47,35 @@ app.post('/api/notes', (request, response) => {
   });
 });
 
-app.put('/api/notes/:id', (request, response) => {
-  Note.findById(request.params.id).then(note => {
-    note.important = !note.important;
-    note.save().then(savedNote => {
-      response.json(savedNote)
+app.put('/api/notes/:id', (request, response, next) => {
+  const body = request.body;
+
+  const note = {
+    content: body.content,
+    important: body.important,
+  }
+  Note.findByIdAndUpdate(request.params.id, note, { new: true})
+    .then(updateNote => {
+      response.json(updateNote)
     })
-  });
+    .catch(next);
 });
 
-app.get("/api/notes/:id", (request, response) => {
+app.get("/api/notes/:id", (request, response, next) => {
   Note.findById(request.params.id).then(note => {
-    response.json(note);
-  })
+    if(note){
+      response.json(note);
+    } else {
+      response.status(404).end();
+    }
+  }).catch(next);
 });
 
-app.delete("/api/notes/:id", (request, response) => {
+app.delete("/api/notes/:id", (request, response, next) => {
   Note.findOneAndDelete(request.params.id).then(_deletedNote => {
     response.status(204).end()
-  });
+  })
+  .catch(next);
 });
 
 const unknownEndpoint = (request, response) => {
@@ -73,6 +83,19 @@ const unknownEndpoint = (request, response) => {
 };
 
 app.use(unknownEndpoint);
+
+const errorHandler = (error, request, response, next) => {
+  console.error(error.message)
+
+  if (error.name === 'CastError') {
+    return response.status(400).send({ error: 'malformatted id' })
+  } 
+
+  next(error)
+}
+
+// this has to be the last loaded middleware.
+app.use(errorHandler)
 
 const PORT = process.env.PORT || 3001
 app.listen(PORT, () => {
