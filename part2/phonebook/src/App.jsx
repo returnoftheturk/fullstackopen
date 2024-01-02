@@ -55,14 +55,13 @@ const App = () => {
           }).catch(err => {
             setNotificationMessage(
               {
-                message: `Information of ${updatedPerson.name} has already been removed from the server`,
+                message: err?.response?.data?.error || 'Unable to complete operation',
                 isError: true
               }
             );
             setTimeout(() => {
               setNotificationMessage({});
             }, 5000);
-            setPersons(persons.filter((p) => p.id !== updatedPerson.id));
           });
       };
     } else {
@@ -86,7 +85,7 @@ const App = () => {
         }).catch(err => {
           setNotificationMessage(
             {
-              message: `Something went wrong`,
+              message: err?.response?.data?.error || 'Unable to complete operation',
               isError: true
             }
           );
