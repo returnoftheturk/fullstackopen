@@ -9,7 +9,10 @@ const Note = require('../models/note');
 beforeEach(async () => {
   await Note.deleteMany({});
   await Note.insertMany(helper.initialNotes);
+});
 
+afterAll(async () => {
+  await mongoose.connection.close();
 });
 
 describe('when there is initially some notes saved', () => {
@@ -70,8 +73,14 @@ describe('viewing a specific note', () => {
 
 describe('addition of a new note', () => {
   let testUser;
+  let jwtToken;
   beforeEach(async () => {
     testUser = await helper.createRootUser();
+    const jwtTokenResponse = await api
+      .post('/api/login')
+      .send(helper.testUserData)
+    
+    jwtToken = jwtTokenResponse.body.token;
   });
 
   test('succeeds with valid data', async () => {
@@ -84,6 +93,7 @@ describe('addition of a new note', () => {
     await api
       .post('/api/notes')
       .send(newNote)
+      .set({ Authorization: `Bearer ${jwtToken}` })
       .expect(201)
       .expect('Content-Type', /application\/json/);
 
@@ -105,6 +115,7 @@ describe('addition of a new note', () => {
     await api
       .post('/api/notes')
       .send(newNote)
+      .set({ Authorization: `Bearer ${jwtToken}` })
       .expect(400);
 
     const notesAtEnd = await helper.notesInDb();
@@ -132,8 +143,4 @@ describe('deletion of a note', () => {
 
     expect(contents).not.toContain(noteToDelete.content);
   });
-});
-
-afterAll(async () => {
-  await mongoose.connection.close();
 });

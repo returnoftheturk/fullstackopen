@@ -13,18 +13,23 @@ const initialNotes = [
   }
 ];
 
-const initialUser = {
-
+const testUserData = {
+  username: 'root',
+  password: 'sekret'
 }
 
 const createRootUser = async () => {
   await User.deleteMany({})
   
-  const passwordHash = await bcrypt.hash('sekret', 10)
-  const user = new User({ username: 'root', passwordHash })
+  const passwordHash = await bcrypt.hash(testUserData.password, 10)
+  const user = new User({ username: testUserData.username, passwordHash })
   
   return await user.save();
 }
+
+const getAuthToken = () => {
+
+};
 
 const nonExistingId = async () => {
   const note = new Note({ content: 'willremovethissoon' });
@@ -46,8 +51,10 @@ const usersInDb = async () => {
 
 module.exports = {
   initialNotes,
+  testUserData,
   nonExistingId,
   notesInDb,
   usersInDb,
-  createRootUser
+  createRootUser,
+  getAuthToken,
 }
