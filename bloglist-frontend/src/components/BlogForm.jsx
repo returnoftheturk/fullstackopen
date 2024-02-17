@@ -1,6 +1,5 @@
-export default ({addBlog, newBlog, handleBlogChange}) => (
+const BlogForm = ({addBlog, newBlog, handleBlogChange}) => (
   <form onSubmit={addBlog}>
-
     <table>
       <tbody>
         <tr>
@@ -22,3 +21,5 @@ export default ({addBlog, newBlog, handleBlogChange}) => (
     </table>
   </form>
 )
+
+export default BlogForm;

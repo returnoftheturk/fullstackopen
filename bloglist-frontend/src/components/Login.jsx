@@ -1,4 +1,4 @@
-export default ({handleLogin, setUsername, setPassword, username, password}) => (
+const Login = ({handleLogin, setUsername, setPassword, username, password}) => (
   <form onSubmit={handleLogin}>
     <div>
       username
@@ -21,3 +21,5 @@ export default ({handleLogin, setUsername, setPassword, username, password}) => 
     <button type="submit">login</button>
   </form>      
 );
+
+export default Login;
