@@ -9,8 +9,6 @@ import loginService from './services/login'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
-  const [username, setUsername] = useState('')
-  const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
   const [notification, setNotification] = useState({type: '', message: ''});
   const blogFormRef = useRef();
@@ -31,21 +29,14 @@ const App = () => {
     }
   }, [user])
 
-  const handleLogin = async (event) => {
-    event.preventDefault()
-    
+  const handleLogin = async (credentials) => {
     try {
-      const user = await loginService.login({
-        username, password,
-      })
+      const user = await loginService.login(credentials)
       window.localStorage.setItem(
         'loggedBlogAppUser', JSON.stringify(user)
       )
       setUser(user)
       createNotification(NOTIFICATION_STATE.SUCCESS, `Logged in ${user.name}`)
-
-      setUsername('')
-      setPassword('')
     } catch (exception) {
       createNotification(NOTIFICATION_STATE.ERROR, 'Wrong credentials')
     }
@@ -79,10 +70,6 @@ const App = () => {
     <Togglable buttonLabel="login">
       <Login 
         handleLogin={handleLogin}
-        setUsername={setUsername}
-        setPassword={setPassword}
-        username={username}
-        password={password}
       />
     </Togglable>
   )
