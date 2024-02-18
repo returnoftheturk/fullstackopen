@@ -1,6 +1,7 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import Blog from './components/Blog'
 import Login from './components/Login'
+import Togglable from './components/Togglable'
 import Notification, { NOTIFICATION_STATE} from './components/Notification'
 import BlogForm from './components/BlogForm'
 import blogService from './services/blogs'
@@ -11,8 +12,8 @@ const App = () => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
-  const [newBlog, setNewBlog] = useState({author: '', title: '', url: ''});
   const [notification, setNotification] = useState({type: '', message: ''});
+  const blogFormRef = useRef();
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('loggedBlogAppUser')
@@ -56,12 +57,11 @@ const App = () => {
     setBlogs([])
   };
 
-  const addBlog = async (e) => {
-    e.preventDefault();
+  const createBlog = async (newBlog) => {
     try {
       const createdBlog = await blogService.create(newBlog);
+      blogFormRef.current.toggleVisibility();
       setBlogs(blogs.concat(createdBlog));
-      setNewBlog({ author: '', title: '', url: '' });
       createNotification(NOTIFICATION_STATE.SUCCESS, `Created ${createdBlog.title} blog`)
     } catch(error) {
       createNotification(NOTIFICATION_STATE.ERROR, error.response.data.error)
@@ -75,10 +75,25 @@ const App = () => {
     }, 5000)
   }
 
-  const handleBlogChange = (e) => {
-    const { name, value } = e.target;
-    setNewBlog({ ...newBlog, [name]: value });
-  }
+  const loginForm = () => (
+    <Togglable buttonLabel="login">
+      <Login 
+        handleLogin={handleLogin}
+        setUsername={setUsername}
+        setPassword={setPassword}
+        username={username}
+        password={password}
+      />
+    </Togglable>
+  )
+
+  const blogForm = () => (
+    <Togglable buttonLabel="New Blog" ref={blogFormRef}>
+      <BlogForm
+        createBlog={createBlog}
+      />
+    </Togglable>
+  )
 
   return (
     <div>
@@ -86,13 +101,7 @@ const App = () => {
       <Notification notification={notification} />
 
       {user === null ?
-        <Login 
-          handleLogin={handleLogin}
-          setUsername={setUsername}
-          setPassword={setPassword}
-          username={username}
-          password={password}
-        />
+        loginForm()
         :
         <div>
           <span>{user.name} logged in</span> &nbsp;
@@ -100,11 +109,7 @@ const App = () => {
             Logout
           </button>
           <h2> Create New </h2>
-          <BlogForm
-            newBlog={newBlog}
-            handleBlogChange={handleBlogChange}
-            addBlog={addBlog}
-          />
+          {blogForm()}
           <h2> Existing Blogs </h2>
           {blogs.map(blog =>
             <Blog key={blog.id} blog={blog} />
