@@ -10,8 +10,11 @@ const BlogForm = ({createBlog}) => {
 
   const addBlog = (e) => {
     e.preventDefault();
-    setNewBlog({ author: '', title: '', url: '' });
-    createBlog(newBlog);
+    createBlog(newBlog, (err) => {
+      if(!err) {
+        setNewBlog({ author: '', title: '', url: '' });
+      }
+    });
   }
 
   return (

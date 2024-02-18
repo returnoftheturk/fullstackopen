@@ -21,4 +21,11 @@ const create = async (newBlog) => {
   return response.data;
 }
 
-export default { getAll, create }
+const update = async (blogId, likes) => {
+  const config = getConfig();
+  const url = baseUrl + `/${blogId}`;
+  const response = await axios.put(url, { likes }, config)
+  return response.data;
+}
+
+export default { getAll, create, update }
