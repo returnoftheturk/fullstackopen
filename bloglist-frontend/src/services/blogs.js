@@ -28,4 +28,11 @@ const update = async (blogId, likes) => {
   return response.data;
 }
 
-export default { getAll, create, update }
+const remove = async (blogId) => {
+  const config = getConfig();
+  const url = baseUrl + `/${blogId}`;
+  const response = await axios.delete(url, config)
+  return response.data;
+}
+
+export default { getAll, create, update, remove }

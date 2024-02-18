@@ -73,6 +73,19 @@ const App = () => {
     }
   }
 
+  const removeBlog = async (blogToRemove) => {
+    if(window.confirm(`Remove blog ${blogToRemove.title} by ${blogToRemove.author}?`)){
+      try {
+        const blogId = blogToRemove.id;
+        await blogService.remove(blogId);
+        setBlogs(blogs.filter((blog) => (blog.id !== blogId)));
+        createNotification(NOTIFICATION_STATE.SUCCESS, `Updated ${blogToRemove.title} blog`)
+      } catch (err) {
+        createNotification(NOTIFICATION_STATE.ERROR, err.response.data.error)
+      }
+    }
+  }
+
   const createNotification = (type, message) => {
     setNotification({type, message })
     setTimeout(() => {
@@ -117,6 +130,7 @@ const App = () => {
               key={blog.id}
               blog={blog}
               addLikeToBlog={addLikeToBlog}
+              removeBlog={removeBlog}
             />
           )}
         </div>  
