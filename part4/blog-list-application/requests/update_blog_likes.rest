@@ -1,10 +1,7 @@
-POST http://localhost:3003/api/blogs
+PUT http://localhost:3003/api/blogs/65d272883f2f15343219e38e
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImxlYnJvbiIsImlkIjoiNjVjN2UyYWE5Nzc4NzE3MWRiODc4ZjZjIiwiaWF0IjoxNzA3NTk4NjgyfQ.9C7maZGopPETzQwbypNCuYxHrAM4GneqEGBYiYr5SNs
 
 {
-  "title": "My blog 7",
-  "author": "Lebron James",
-  "url": "https://",
   "likes": 10
 }

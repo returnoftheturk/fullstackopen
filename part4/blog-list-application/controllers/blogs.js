@@ -6,7 +6,7 @@ const blogsRouter = express.Router();
 blogsRouter.get('/', async (request, response) => {
   const user = request.user;
   const blogs = await Blog
-    .find({user: user.id}).populate('user', { username: 1, name: 1, passwordHash: 1 });
+    .find({user: user.id}).populate('user', { username: 1, name: 1 });
   response.json(blogs);
 });
 
@@ -24,8 +24,12 @@ blogsRouter.post('/', async (request, response) => {
   const savedBlog = await blog.save();
   user.blogs = user.blogs.concat(savedBlog);
   await user.save()
+  const populatedBlog = await Blog.populate(savedBlog, {
+      path: 'user',
+      select: 'username name'
+  });
 
-  response.status(201).json(savedBlog);
+  response.status(201).json(populatedBlog);
 });
 
 blogsRouter.delete('/:id', async (request, response) => {
@@ -48,7 +52,7 @@ blogsRouter.put('/:id', async (request, response) => {
     { _id: request.params.id, user: user._id },
     { likes },
     { new: true, runValidators: true, context: 'query'}
-  );
+  ).populate('user', { username: 1, name: 1});
   response.json(updatedBlog);
 })
 
