@@ -13,8 +13,8 @@ const Blog = ({ blog, addLikeToBlog, removeBlog }) => {
       </button>
       {isExpanded && (
         <div>
-          <div><b>URL</b>: {blog.url}</div>
-          <div>
+          <div className='url'><b>URL</b>: {blog.url}</div>
+          <div className='likes'>
             <span>
               <b>Likes</b>: {blog.likes || 0}
             </span> &nbsp;
@@ -22,7 +22,7 @@ const Blog = ({ blog, addLikeToBlog, removeBlog }) => {
               like
             </button>
           </div>
-          <div><b>User</b>: {blog.user.name}</div>
+          <div test='userName'><b>User</b>: {blog?.user?.name}</div>
           <button onClick={() => removeBlog(blog)}>
             Remove
           </button>
