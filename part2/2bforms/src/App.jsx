@@ -1,25 +1,25 @@
-import { useState, useEffect, useRef } from "react";
-import Note from "./components/Note";
-import LoginForm from "./components/LoginForm";
-import NoteForm from "./components/NoteForm";
-import Togglable from "./components/Togglable";
-import Footer from "./components/Footer";
-import noteService from "./services/notes";
-import loginService from "./services/login";
-import Notification from "./components/Notification";
+import { useState, useEffect, useRef } from 'react'
+import Note from './components/Note'
+import LoginForm from './components/LoginForm'
+import NoteForm from './components/NoteForm'
+import Togglable from './components/Togglable'
+import Footer from './components/Footer'
+import noteService from './services/notes'
+import loginService from './services/login'
+import Notification from './components/Notification'
 
 const App = () => {
-  const [notes, setNotes] = useState([]);
+  const [notes, setNotes] = useState([])
   const [user, setUser] = useState(null)
-  const [showAll, setShowAll] = useState(true);
-  const [errorMessage, setErrorMessage] = useState(null);
+  const [showAll, setShowAll] = useState(true)
+  const [errorMessage, setErrorMessage] = useState(null)
   const noteFormRef = useRef()
 
   useEffect(() => {
     noteService.getAll().then((initialNotes) => {
-      setNotes(initialNotes);
-    });
-  }, []);
+      setNotes(initialNotes)
+    })
+  }, [])
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('loggedNoteappUser')
@@ -37,37 +37,37 @@ const App = () => {
       .then(returnedNote => {
         setNotes(notes.concat(returnedNote))
       })
-  };
+  }
 
   const toggleImportanceOf = (id) => {
-    const note = notes.find((n) => n.id === id);
-    const changedNote = { ...note, important: !note.important };
+    const note = notes.find((n) => n.id === id)
+    const changedNote = { ...note, important: !note.important }
     noteService
       .update(id, changedNote)
       .then((toggledNote) => {
-        setNotes(notes.map((n) => (n.id !== id ? n : toggledNote)));
+        setNotes(notes.map((n) => (n.id !== id ? n : toggledNote)))
       })
       .catch((error) => {
         setErrorMessage(
           `Note '${note.content}' was already removed from server`
-        );
+        )
         setTimeout(() => {
-          setErrorMessage(null);
-        }, 5000);
-        setNotes(notes.filter((n) => n.id !== id));
-      });
-  };
+          setErrorMessage(null)
+        }, 5000)
+        setNotes(notes.filter((n) => n.id !== id))
+      })
+  }
 
-  const notesToShow = showAll ? notes : notes.filter((note) => note.important);
-  
-  const handleLogin = async ({username, password}) => {
+  const notesToShow = showAll ? notes : notes.filter((note) => note.important)
+
+  const handleLogin = async ({ username, password }) => {
     try {
       const user = await loginService.login({
         username, password,
       })
       window.localStorage.setItem(
         'loggedNoteappUser', JSON.stringify(user)
-      ) 
+      )
       setUser(user)
       noteService.setToken(user.token)
     } catch (exception) {
@@ -79,19 +79,19 @@ const App = () => {
   }
 
   const handleLogout = () => {
-    window.localStorage.removeItem('loggedNoteappUser');
-    setUser(null);
-  };
+    window.localStorage.removeItem('loggedNoteappUser')
+    setUser(null)
+  }
 
   const loginForm = () => {
     return (
       <Togglable buttonLabel="login">
-          <LoginForm
-            handleLogin={handleLogin}
-          />
+        <LoginForm
+          handleLogin={handleLogin}
+        />
       </Togglable>
     )
-  };
+  }
 
   const noteForm = () => (
     <Togglable buttonLabel="new note" ref={noteFormRef}>
@@ -99,7 +99,7 @@ const App = () => {
         createNote={addNote}
       />
     </Togglable>
-  );
+  )
 
   return (
     <div>
@@ -119,7 +119,7 @@ const App = () => {
 
       <div>
         <button onClick={() => setShowAll(!showAll)}>
-          show {showAll ? "important" : "all"}
+          show {showAll ? 'important' : 'all'}
         </button>
       </div>
 
@@ -135,7 +135,7 @@ const App = () => {
 
       <Footer />
     </div>
-  );
-};
+  )
+}
 
-export default App;
+export default App
