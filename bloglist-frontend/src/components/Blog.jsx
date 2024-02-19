@@ -1,7 +1,7 @@
 import { useState } from 'react'
 
 const Blog = ({ blog, addLikeToBlog, removeBlog }) => {
-  const [isExpanded, setIsExpanded] = useState(false);
+  const [isExpanded, setIsExpanded] = useState(false)
 
   return (
     <div className="blog">
@@ -28,7 +28,7 @@ const Blog = ({ blog, addLikeToBlog, removeBlog }) => {
           </button>
         </div>
       )}
-    </div>  
+    </div>
   )
 }
 

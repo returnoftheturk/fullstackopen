@@ -1,23 +1,23 @@
 export const NOTIFICATION_STATE = {
   ERROR: 'error',
   SUCCESS: 'success'
-};
+}
 
 const Notification = ({ notification }) => {
   if (!notification.message) {
-    return null;
+    return null
   }
 
   return (
-    <div 
+    <div
       className="notification"
       style={{
         color:notification.type === NOTIFICATION_STATE.ERROR ? 'red' : 'green'
       }}
-      >
-        {notification.message}
+    >
+      {notification.message}
     </div>
   )
-};
+}
 
-export default Notification;
+export default Notification

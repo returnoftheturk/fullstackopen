@@ -1,12 +1,12 @@
 import { useState } from 'react'
 
-const Login = ({handleLogin}) => {
+const Login = ({ handleLogin }) => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
 
   const onSubmit = async (event) => {
-    event.preventDefault();
-    await handleLogin({username, password})
+    event.preventDefault()
+    await handleLogin({ username, password })
     setUsername('')
     setPassword('')
   }
@@ -15,7 +15,7 @@ const Login = ({handleLogin}) => {
     <form onSubmit={onSubmit}>
       <div>
         username
-          <input
+        <input
           type="text"
           value={username}
           name="Username"
@@ -24,7 +24,7 @@ const Login = ({handleLogin}) => {
       </div>
       <div>
         password
-          <input
+        <input
           type="password"
           value={password}
           name="Password"
@@ -32,8 +32,8 @@ const Login = ({handleLogin}) => {
         />
       </div>
       <button type="submit">login</button>
-    </form>      
-  );
+    </form>
+  )
 }
 
-export default Login;
+export default Login
