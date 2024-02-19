@@ -14,52 +14,52 @@ const blog = {
 test('renders content', async () => {
   const { container } = render(
     <Blog blog={blog} />
-  );
+  )
 
   // Renders the header
   const blogHeader = screen.getByText('Test title by Test Author')
-  expect(blogHeader).toBeDefined();
+  expect(blogHeader).toBeDefined()
 
   // Does not render the likes and URL by default
-  const blogLikes = container.querySelector('.likes');
-  expect(blogLikes).toBeNull();
+  const blogLikes = container.querySelector('.likes')
+  expect(blogLikes).toBeNull()
 
   const blogUrl = container.querySelector('.url')
-  expect(blogUrl).toBeNull();
+  expect(blogUrl).toBeNull()
 })
 
 test('renders likes and url when show button is clicked', async () => {
   const { container } = render(
     <Blog blog={blog} />
-  );
+  )
   const user = userEvent.setup()
 
   // Renders the header
   const blogHeader = screen.getByText('Test title by Test Author')
-  expect(blogHeader).toBeDefined();
+  expect(blogHeader).toBeDefined()
 
   // Does not render the likes and URL by default
-  let blogLikes = container.querySelector('.likes');
-  expect(blogLikes).toBeNull();
+  let blogLikes = container.querySelector('.likes')
+  expect(blogLikes).toBeNull()
 
   let blogUrl = container.querySelector('.url')
-  expect(blogUrl).toBeNull();
+  expect(blogUrl).toBeNull()
 
   const button = screen.getByText('view')
   await user.click(button)
 
-  blogLikes = container.querySelector('.likes');
-  expect(blogLikes).toBeDefined();
+  blogLikes = container.querySelector('.likes')
+  expect(blogLikes).toBeDefined()
 
   blogUrl = container.querySelector('.url')
-  expect(blogUrl).toBeDefined();
+  expect(blogUrl).toBeDefined()
 })
 
 test('clicking the "like" button twice calls the component event handler twice', async () => {
   const mockHandler = jest.fn()
   const user = userEvent.setup()
 
-  render(<Blog blog={blog} addLikeToBlog={mockHandler}/>);
+  render(<Blog blog={blog} addLikeToBlog={mockHandler}/>)
 
   const button = screen.getByText('view')
   await user.click(button)
@@ -67,7 +67,7 @@ test('clicking the "like" button twice calls the component event handler twice',
   const likeButton = screen.getByText('like')
   await user.click(likeButton)
   await user.click(likeButton)
-  
-  expect(mockHandler.mock.calls).toHaveLength(2);
+
+  expect(mockHandler.mock.calls).toHaveLength(2)
   expect(mockHandler.mock.calls[0][0]).toEqual(blog)
 })
