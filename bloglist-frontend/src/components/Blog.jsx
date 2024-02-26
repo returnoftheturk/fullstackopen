@@ -12,13 +12,16 @@ const Blog = ({ blog, addLikeToBlog, removeBlog }) => {
         {isExpanded ? 'hide' : 'view'}
       </button>
       {isExpanded && (
-        <div>
+        <div id={`expanded-blog-${blog.id}`}>
           <div className='url'><b>URL</b>: {blog.url}</div>
           <div className='likes'>
             <span>
               <b>Likes</b>: {blog.likes || 0}
             </span> &nbsp;
-            <button onClick={() => addLikeToBlog(blog)}>
+            <button 
+              onClick={() => addLikeToBlog(blog)}
+              id="like-button"
+              >
               like
             </button>
           </div>
