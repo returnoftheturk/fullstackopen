@@ -1,7 +1,7 @@
 import supertest from 'supertest';
 import mongoose from 'mongoose';
-import './testSetup.js';
 
+import './testSetup.js';
 import app from '../app';
 const api = supertest(app);
 
