@@ -121,6 +121,62 @@ describe('Blog app', function() {
             .should('not.exist')
         })
       })
+
+      const addLikesToBlog = (blogId, numLikes) => {
+        cy.get(`#expanded-blog-${blogId}`)
+          .find('#like-button')
+          .as('likeButton')
+        for(let i = 0; i < numLikes; i++) {
+          cy.get('@likeButton')
+            .click();
+          
+          cy.get(`#expanded-blog-${blogId}`)
+            .contains(`Likes: ${i + 1}`)
+        }
+      }
+
+      it('blogs are ordered by likes, with the most liked blog being first', function () {
+        let blog1Id;
+        let blog2Id;
+      
+        // Create both blogs concurrently
+        const createBlogPromises = [
+          cy.createBlog({
+            author: 'B Bauther',
+            title: 'Blog 1 title',
+            url: 'another URL'
+          }),
+          cy.createBlog({
+            author: 'A Author',
+            title: 'Blog 2 title',
+            url: 'some URL'
+          })
+        ];
+      
+        // Resolve promises and assign blogIds
+        Promise.all(createBlogPromises).then(([blogId1, blogId2]) => {
+          blog1Id = blogId1;
+          blog2Id = blogId2;
+      
+          cy.visit('')
+          cy.contains('Blog 1 title by B Bauther')
+            .parent()
+            .find('button')
+            .click();
+  
+          cy.contains('Blog 2 title by A Author')
+            .parent()
+            .find('button')
+            .click();
+
+          addLikesToBlog(blog1Id, 5);
+          cy.get('.blog').eq(0).should('contain', 'Blog 1 title by B Bauther');
+  
+          addLikesToBlog(blog2Id, 6);
+          cy.get('.blog').eq(0).should('contain', 'Blog 2 title by A Author');
+        });
+      });
+      
     })
   })
 })
