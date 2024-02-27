@@ -39,7 +39,7 @@ describe('Blog app', function() {
       cy.get('html').should('not.contain', 'Matti Luukkainen logged in')
     })
 
-    describe.only('When logged in', function() {
+    describe('When logged in', function() {
       beforeEach(function() {
         cy.login({ username: 'mluukkai', password: 'salainen' })
       })
@@ -64,11 +64,10 @@ describe('Blog app', function() {
             newBlogId = blogId
           })
 
-          cy.visit('http://localhost:5174')
+          cy.visit('')
         })
   
         it('its likes can be updated', function () {
-          console.log(newBlogId, 'new blog id')
           cy.contains('another title by another Author').parent().find('button').as('viewButton')
           cy.get('@viewButton')
             .click()
@@ -77,13 +76,24 @@ describe('Blog app', function() {
             .contains('Likes: 0')
           
           cy.get(`#expanded-blog-${newBlogId}`)
-            .find('#like-button').as('likeButton')
-
-          cy.get('@likeButton')
+            .find('#like-button')
             .click();
           
           cy.get(`#expanded-blog-${newBlogId}`)
             .contains('Likes: 1')
+        })
+
+        it.only('user who created a blog can delete it', function () {
+          cy.contains('another title by another Author').parent().find('button').as('viewButton')
+          cy.get('@viewButton')
+            .click()
+          
+          cy.on('window:confirm', () => true);
+          cy.get(`#expanded-blog-${newBlogId}`)
+            .find('#delete-button')
+            .click();
+          
+          cy.contains('another title by another Author').should('not.exist')
         })
       })
     })
