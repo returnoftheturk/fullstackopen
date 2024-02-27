@@ -1,7 +1,12 @@
 import { useState } from 'react'
 
-const Blog = ({ blog, addLikeToBlog, removeBlog }) => {
+const Blog = ({ blog,user, addLikeToBlog, removeBlog }) => {
   const [isExpanded, setIsExpanded] = useState(false)
+
+  const isUserOwner = (user, blog) => {
+    if(!user || !user.username || !blog || !blog.user) return false;
+    return blog.user.username === user.username
+  }
 
   return (
     <div className="blog">
@@ -26,12 +31,14 @@ const Blog = ({ blog, addLikeToBlog, removeBlog }) => {
             </button>
           </div>
           <div><b>User</b>: {blog?.user?.name}</div>
-          <button 
-            onClick={() => removeBlog(blog)}
-            id="delete-button"
-            >
-            Remove
-          </button>
+          {isUserOwner(user, blog) &&
+            <button
+              onClick={() => removeBlog(blog)}
+              id="delete-button"
+              >
+              Remove
+            </button>
+          }
         </div>
       )}
     </div>

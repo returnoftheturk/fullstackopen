@@ -1,13 +1,19 @@
 describe('Blog app', function() {
   beforeEach(function() {
-    cy.request('POST', `${Cypress.env('BACKEND')}/testing/reset`)
+    cy.resetDatabase();
     const user = {
       name: 'Matti Luukkainen',
       username: 'mluukkai',
       password: 'salainen'
     }
-    cy.request('POST', `${Cypress.env('BACKEND')}/users`, user) 
-    cy.visit('')
+    cy.createUser(user)
+
+    const user2 = {
+      name: 'Matti Luukkainen 2',
+      username: 'mluukkai2',
+      password: 'salainen2'
+    }
+    cy.createUser(user2)
   })
 
   it('Login form is shown', function() {
@@ -83,7 +89,7 @@ describe('Blog app', function() {
             .contains('Likes: 1')
         })
 
-        it.only('user who created a blog can delete it', function () {
+        it('user who created a blog can delete it', function () {
           cy.contains('another title by another Author').parent().find('button').as('viewButton')
           cy.get('@viewButton')
             .click()
@@ -94,6 +100,25 @@ describe('Blog app', function() {
             .click();
           
           cy.contains('another title by another Author').should('not.exist')
+        })
+
+        it('only the creator can see the delete button of a blog', function () {
+          cy.contains('another title by another Author').parent().find('button').as('viewButton')
+          cy.get('@viewButton')
+            .click()
+
+          cy.on('window:confirm', () => true);
+          cy.get(`#expanded-blog-${newBlogId}`)
+            .find('#delete-button')
+
+          cy.contains('Logout').click()
+          cy.login({username: 'mluukkai2', password: 'salainen2'})
+          cy.get('@viewButton')
+            .click()
+
+          cy.get(`#expanded-blog-${newBlogId}`)
+            .find('#delete-button')
+            .should('not.exist')
         })
       })
     })

@@ -19,3 +19,18 @@ Cypress.Commands.add('createBlog', ({ author, title, url }) => {
     return response.body.id
   });
 })
+
+Cypress.Commands.add('createUser', ({ name, username, password }) => {
+  const user = {
+    name,
+    username,
+    password,
+  }
+  cy.request('POST', `${Cypress.env('BACKEND')}/users`, user)
+  cy.visit('')
+})
+
+Cypress.Commands.add('resetDatabase', () => {
+  cy.request('POST', `${Cypress.env('BACKEND')}/testing/reset`)
+  cy.visit('')
+})

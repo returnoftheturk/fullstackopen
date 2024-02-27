@@ -4,9 +4,8 @@ import Blog from '../models/blog.js';
 const blogsRouter = express.Router();
 
 blogsRouter.get('/', async (request, response) => {
-  const user = request.user;
   const blogs = await Blog
-    .find({user: user.id}).populate('user', { username: 1, name: 1 });
+    .find().populate('user', { username: 1, name: 1 });
   response.json(blogs);
 });
 
