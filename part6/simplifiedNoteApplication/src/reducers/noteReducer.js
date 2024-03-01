@@ -12,7 +12,7 @@ const noteReducer = (state = [], action) => {
       return state.map(note =>
         note.id !== id ? note : changedNote 
       )
-     }
+    }
     default:
       return state
   }
