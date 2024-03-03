@@ -21,7 +21,15 @@ const AnecdoteList = () => {
   }
 
   const dispatch = useDispatch()
-  const anecdotes = useSelector(state => state.sort(sortFn))
+  const anecdotes = useSelector(state => {
+    const filter = state.filter.toLowerCase();
+    const sortedAnecdotes = state.anecdotes.sort(sortFn);
+    if(filter) {
+      console.log('sorted anecdotes: ', sortedAnecdotes)
+      return sortedAnecdotes.filter(anecdote => anecdote.content.toLowerCase().includes(filter))
+    }
+    return sortedAnecdotes
+  })
 
   return (
     <div>
