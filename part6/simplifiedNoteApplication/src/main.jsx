@@ -1,17 +1,16 @@
 import ReactDOM from 'react-dom/client'
-import { createStore, combineReducers } from 'redux';
 import { Provider } from 'react-redux'
+import { configureStore } from '@reduxjs/toolkit'
 import noteReducer, {createNote} from './reducers/noteReducer';
 import filterReducer, {filterChange} from './reducers/filterReducer';
 import App from './App';
 
-const reducer = combineReducers({
-  notes: noteReducer,
-  filter: filterReducer
+const store = configureStore({
+  reducer: {
+    notes: noteReducer,
+    filter: filterReducer
+  }
 })
-
-const store = createStore(reducer)
-console.log(store.getState())
 
 store.subscribe(() => console.log('subscribe log:', store.getState()))
 store.dispatch(filterChange('IMPORTANT'))
