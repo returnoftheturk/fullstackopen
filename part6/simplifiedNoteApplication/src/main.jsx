@@ -1,7 +1,7 @@
 import ReactDOM from 'react-dom/client'
 import { Provider } from 'react-redux'
 import { configureStore } from '@reduxjs/toolkit'
-import noteReducer, {createNote} from './reducers/noteReducer';
+import noteReducer from './reducers/noteReducer';
 import filterReducer, {filterChange} from './reducers/filterReducer';
 import App from './App';
 
@@ -13,8 +13,7 @@ const store = configureStore({
 })
 
 store.subscribe(() => console.log('subscribe log:', store.getState()))
-store.dispatch(filterChange('IMPORTANT'))
-store.dispatch(createNote('combineReducers forms one reducer from many simple reducers'))
+store.dispatch(filterChange('ALL'))
 
 const root = ReactDOM.createRoot(document.getElementById('root'))
 
