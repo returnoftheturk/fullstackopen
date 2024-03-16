@@ -1,0 +1,99 @@
+{
+  "notes": [
+    {
+      "content": "the app state is in redux store",
+      "important": false,
+      "id": "1"
+    },
+    {
+      "content": "state changes are made with actions",
+      "important": false,
+      "id": "2"
+    },
+    {
+      "content": "some notes 3",
+      "important": true,
+      "id": "3"
+    },
+    {
+      "id": "98cf",
+      "content": "asdasd",
+      "important": false
+    },
+    {
+      "id": "df16",
+      "content": "asdas",
+      "important": true
+    },
+    {
+      "id": "a2ef",
+      "content": "asdas",
+      "important": false
+    },
+    {
+      "id": "de4e",
+      "content": "asdas",
+      "important": true
+    },
+    {
+      "id": "5ee0",
+      "content": "asdsada",
+      "important": true
+    },
+    {
+      "id": "cc11",
+      "content": "asdas",
+      "important": true
+    },
+    {
+      "id": "5ca6",
+      "content": "asdasd",
+      "important": true
+    },
+    {
+      "id": "b8b3",
+      "content": "random note",
+      "important": true
+    },
+    {
+      "id": "160d",
+      "content": "alksda",
+      "important": true
+    },
+    {
+      "id": "0169",
+      "content": "asdasda",
+      "important": true
+    },
+    {
+      "id": "f7a7",
+      "content": "asdas",
+      "important": false
+    },
+    {
+      "id": "042d",
+      "content": "asdas",
+      "important": true
+    },
+    {
+      "id": "5e7f",
+      "content": "sda",
+      "important": true
+    },
+    {
+      "id": "04b3",
+      "content": "asdas",
+      "important": true
+    },
+    {
+      "id": "512f",
+      "content": "",
+      "important": true
+    },
+    {
+      "id": "4d03",
+      "content": "adas",
+      "important": true
+    }
+  ]
+}
