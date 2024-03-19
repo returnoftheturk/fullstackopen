@@ -1,4 +1,3 @@
-import ReactDOM from 'react-dom/client'
 import { useState } from 'react'
 
 import {
@@ -7,7 +6,6 @@ import {
   Route,
   Link,
   Navigate,
-  useParams,
   useNavigate,
 } from "react-router-dom"
 
